@@ -1,0 +1,18 @@
+# Build
+build/
+.gradle/
+local.properties
+*.apk
+
+# JDK
+jdk-17/
+
+# Downloaded files
+download/
+
+# Native libs - too large for GitHub
+app/src/main/jniLibs/
+
+# Android SDK
+android-sdk/
+~/android-sdk/

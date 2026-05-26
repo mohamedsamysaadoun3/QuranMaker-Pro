@@ -1,0 +1,3 @@
+-keep class hazem.nurmontage.videoquran.** { *; }
+-keep class com.arthenica.ffmpegkit.** { *; }
+-keepclasseswithmembernames class * { native <methods>; }

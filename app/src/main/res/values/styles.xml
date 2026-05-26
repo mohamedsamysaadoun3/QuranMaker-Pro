@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="App.VideoPlayer" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+    <style name="AyaPresetButton">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/bg_preset_btn</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">72.0dip</item>
+        <item name="android:layout_height">36.0dip</item>
+        <item name="android:layout_marginEnd">6.0dip</item>
+    </style>
+    <style name="Base.DialogWindowTitleBackground.AppCompat" parent="@android:style/Widget">
+        <item name="android:background">@null</item>
+        <item name="android:paddingLeft">?dialogPreferredPadding</item>
+        <item name="android:paddingTop">@dimen/abc_dialog_padding_top_material</item>
+        <item name="android:paddingRight">?dialogPreferredPadding</item>
+    </style>
+    <style name="Base.Widget.AppCompat.Button.Colored" parent="@android:style/Widget.Material.Button.Colored">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Colored</item>
+    </style>
+    <style name="ExoStyledControls.Button.Bottom.AudioTrack" parent="@style/ExoStyledControls.Button.Bottom">
+        <item name="android:contentDescription">@string/exo_track_selection_title_audio</item>
+    </style>
+    <style name="Base.Theme.NurMontage" parent="@style/Theme.Material3.Light.NoActionBar" />
+    <style name="Theme.NurMontage" parent="@style/Base.Theme.NurMontage" />
+    <style name="Theme.NurMontage.Fullscreen" parent="@style/Theme.NurMontage">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:actionBarStyle">@style/Widget.AppCompat.ActionBar</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+    <style name="Theme.NurMontage.Starting" parent="@style/Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.NurMontage</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/nurmontage_splach</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+    </style>
+    <style name="Theme.SplashScreen" parent="@style/Theme.SplashScreen.Common">
+        <item name="postSplashScreenTheme">?android:theme</item>
+        <item name="windowSplashScreenAnimatedIcon">@android:drawable/sym_def_app_icon</item>
+        <item name="windowSplashScreenAnimationDuration">@integer/default_icon_animation_duration</item>
+        <item name="windowSplashScreenBackground">?android:colorBackground</item>
+    </style>
+    <style name="Theme.SplashScreen.Common" parent="@style/Base.Theme.SplashScreen.DayNight">
+        <item name="android:windowBackground">@drawable/compat_splash_screen_no_icon_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:opacity">opaque</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="splashScreenIconSize">@dimen/splashscreen_icon_size_no_background</item>
+    </style>
+    <style name="Theme.SplashScreen.IconBackground" parent="@style/Theme.SplashScreen">
+        <item name="android:windowBackground">@drawable/compat_splash_screen</item>
+        <item name="splashScreenIconSize">@dimen/splashscreen_icon_size_with_background</item>
+    </style>
+    <style name="ThemeOverlay.Material3.DynamicColors.Dark" parent="@style/ThemeOverlay.Material3.Dark" />
+    <style name="ThemeOverlay.Material3.DynamicColors.DayNight" parent="@style/ThemeOverlay.Material3.DynamicColors.Light" />
+    <style name="ThemeOverlay.Material3.DynamicColors.Light" parent="@style/ThemeOverlay.Material3.Light" />
+    <style name="ThemeOverlay.Material3.ExtendedFloatingActionButton.Primary" parent="">
+        <item name="colorContainer">?colorPrimaryContainer</item>
+        <item name="colorOnContainer">?colorOnPrimaryContainer</item>
+    </style>
+    <style name="ThemeOverlay.Material3.HarmonizedColors" parent="">
+        <item name="colorError">@color/material_harmonized_color_error</item>
+        <item name="colorErrorContainer">@color/material_harmonized_color_error_container</item>
+        <item name="colorOnError">@color/material_harmonized_color_on_error</item>
+        <item name="colorOnErrorContainer">@color/material_harmonized_color_on_error_container</item>
+    </style>
+    <style name="ThemeOverlay.Material3.HarmonizedColors.Empty" parent="" />
+    <style name="ThemeOverlay.Material3.Light" parent="@style/ThemeOverlay.MaterialComponents.Light">
+        <item name="android:colorBackground">@color/m3_sys_color_light_background</item>
+        <item name="android:textColorPrimary">@color/m3_default_color_primary_text</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/m3_primary_text_disable_only</item>
+        <item name="android:textColorSecondary">@color/m3_default_color_secondary_text</item>
+        <item name="android:textColorPrimaryInverse">@color/m3_dark_default_color_primary_text</item>
+        <item name="android:textColorSecondaryInverse">@color/m3_dark_default_color_secondary_text</item>
+        <item name="android:textColorHintInverse">@color/m3_dark_hint_foreground</item>
+        <item name="android:textColorHighlight">@color/m3_highlighted_text</item>
+        <item name="android:textColorHint">@color/m3_hint_foreground</item>
+        <item name="android:textColorLink">?colorPrimary</item>
+        <item name="android:textColorTertiary">@color/m3_default_color_secondary_text</item>
+        <item name="android:textColorTertiaryInverse">@color/m3_dark_default_color_secondary_text</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">@color/m3_dark_primary_text_disable_only</item>
+        <item name="android:textColorAlertDialogListItem">@color/m3_default_color_primary_text</item>
+        <item name="android:textColorHighlightInverse">@color/m3_dark_highlighted_text</item>
+        <item name="android:textColorLinkInverse">?colorPrimaryInverse</item>
+        <item name="colorError">@color/m3_sys_color_light_error</item>
+        <item name="colorErrorContainer">@color/m3_sys_color_light_error_container</item>
+        <item name="colorOnBackground">@color/m3_sys_color_light_on_background</item>
+        <item name="colorOnError">@color/m3_sys_color_light_on_error</item>
+        <item name="colorOnErrorContainer">@color/m3_sys_color_light_on_error_container</item>
+        <item name="colorOnSurface">@color/m3_sys_color_light_on_surface</item>
+        <item name="colorOnSurfaceInverse">@color/m3_sys_color_light_inverse_on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/m3_sys_color_light_on_surface_variant</item>
+        <item name="colorOutline">@color/m3_sys_color_light_outline</item>
+        <item name="colorOutlineVariant">@color/m3_sys_color_light_outline_variant</item>
+        <item name="colorSurface">@color/m3_sys_color_light_surface</item>
+        <item name="colorSurfaceBright">@color/m3_sys_color_light_surface_bright</item>
+        <item name="colorSurfaceContainer">@color/m3_sys_color_light_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/m3_sys_color_light_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/m3_sys_color_light_surface_container_highest</item>
+        <item name="colorSurfaceContainerLow">@color/m3_sys_color_light_surface_container_low</item>
+        <item name="colorSurfaceContainerLowest">@color/m3_sys_color_light_surface_container_lowest</item>
+        <item name="colorSurfaceDim">@color/m3_sys_color_light_surface_dim</item>
+        <item name="colorSurfaceInverse">@color/m3_sys_color_light_inverse_surface</item>
+        <item name="colorSurfaceVariant">@color/m3_sys_color_light_surface_variant</item>
+    </style>
+    <style name="ThemeOverlay.Material3.PersonalizedColors" parent="">
+        <item name="android:colorBackground">@color/material_personalized_color_background</item>
+        <item name="android:textColorPrimary">@color/material_personalized_color_primary_text</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/material_personalized_primary_text_disable_only</item>
+        <item name="android:textColorSecondary">@color/material_personalized_color_secondary_text</item>
+        <item name="android:textColorPrimaryInverse">@color/material_personalized_color_primary_text_inverse</item>
+        <item name="android:textColorSecondaryInverse">@color/material_personalized_color_secondary_text_inverse</item>
+        <item name="android:textColorHintInverse">@color/material_personalized_hint_foreground_inverse</item>
+        <item name="android:textColorHighlight">@color/material_personalized__highlighted_text</item>
+        <item name="android:textColorHint">@color/material_personalized_hint_foreground</item>
+        <item name="android:textColorTertiary">@color/material_personalized_color_secondary_text</item>
+        <item name="android:textColorTertiaryInverse">@color/material_personalized_color_secondary_text_inverse</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">@color/material_personalized_primary_inverse_text_disable_only</item>
+        <item name="android:textColorAlertDialogListItem">@color/material_personalized_color_primary_text</item>
+        <item name="android:textColorHighlightInverse">@color/material_personalized__highlighted_text_inverse</item>
+        <item name="android:colorControlNormal">@color/material_personalized_color_control_normal</item>
+        <item name="android:colorControlActivated">@color/material_personalized_color_control_activated</item>
+        <item name="android:colorControlHighlight">@color/material_personalized_color_control_highlight</item>
+        <item name="colorError">@color/material_personalized_color_error</item>
+        <item name="colorErrorContainer">@color/material_personalized_color_error_container</item>
+        <item name="colorOnBackground">@color/material_personalized_color_on_background</item>
+        <item name="colorOnError">@color/material_personalized_color_on_error</item>
+        <item name="colorOnErrorContainer">@color/material_personalized_color_on_error_container</item>
+        <item name="colorOnPrimary">@color/material_personalized_color_on_primary</item>
+        <item name="colorOnPrimaryContainer">@color/material_personalized_color_on_primary_container</item>
+        <item name="colorOnSecondary">@color/material_personalized_color_on_secondary</item>
+        <item name="colorOnSecondaryContainer">@color/material_personalized_color_on_secondary_container</item>
+        <item name="colorOnSurface">@color/material_personalized_color_on_surface</item>
+        <item name="colorOnSurfaceInverse">@color/material_personalized_color_on_surface_inverse</item>
+        <item name="colorOnSurfaceVariant">@color/material_personalized_color_on_surface_variant</item>
+        <item name="colorOnTertiary">@color/material_personalized_color_on_tertiary</item>
+        <item name="colorOnTertiaryContainer">@color/material_personalized_color_on_tertiary_container</item>
+        <item name="colorOutline">@color/material_personalized_color_outline</item>
+        <item name="colorOutlineVariant">@color/material_personalized_color_outline_variant</item>
+        <item name="colorPrimary">@color/material_personalized_color_primary</item>
+        <item name="colorPrimaryContainer">@color/material_personalized_color_primary_container</item>
+        <item name="colorPrimaryInverse">@color/material_personalized_color_primary_inverse</item>
+        <item name="colorSecondary">@color/material_personalized_color_secondary</item>
+        <item name="colorSecondaryContainer">@color/material_personalized_color_secondary_container</item>
+        <item name="colorSurface">@color/material_personalized_color_surface</item>
+        <item name="colorSurfaceBright">@color/material_personalized_color_surface_bright</item>
+        <item name="colorSurfaceContainer">@color/material_personalized_color_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/material_personalized_color_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/material_personalized_color_surface_container_highest</item>
+        <item name="colorSurfaceContainerLow">@color/material_personalized_color_surface_container_low</item>
+        <item name="colorSurfaceContainerLowest">@color/material_personalized_color_surface_container_lowest</item>
+        <item name="colorSurfaceDim">@color/material_personalized_color_surface_dim</item>
+        <item name="colorSurfaceInverse">@color/material_personalized_color_surface_inverse</item>
+        <item name="colorSurfaceVariant">@color/material_personalized_color_surface_variant</item>
+        <item name="colorTertiary">@color/material_personalized_color_tertiary</item>
+        <item name="colorTertiaryContainer">@color/material_personalized_color_tertiary_container</item>
+    </style>
+    <style name="ThemeOverlay.NurMontage.FullscreenContainer" parent="">
+        <item name="android:textColorSecondary">@color/light_blue_A200</item>
+    </style>
+    <style name="Widget.MaterialComponents.BottomAppBar.Colored" parent="@style/Widget.MaterialComponents.BottomAppBar">
+        <item name="backgroundTint">?colorPrimary</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.MaterialComponents.BottomAppBar.Primary</item>
+    </style>
+    <style name="Widget.MaterialComponents.BottomNavigationView.Colored" parent="@style/Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">?colorPrimary</item>
+        <item name="enforceMaterialTheme">true</item>
+        <item name="enforceTextAppearance">true</item>
+        <item name="itemIconTint">@color/mtrl_navigation_bar_colored_item_tint</item>
+        <item name="itemRippleColor">@color/mtrl_navigation_bar_colored_ripple_color</item>
+        <item name="itemTextAppearanceActive">?textAppearanceCaption</item>
+        <item name="itemTextAppearanceInactive">?textAppearanceCaption</item>
+        <item name="itemTextColor">@color/mtrl_navigation_bar_colored_item_tint</item>
+    </style>
+    <style name="Widget.MaterialComponents.NavigationRailView.Colored" parent="@style/Widget.MaterialComponents.NavigationRailView">
+        <item name="android:background">?colorPrimary</item>
+        <item name="itemIconTint">@color/mtrl_navigation_bar_colored_item_tint</item>
+        <item name="itemRippleColor">@color/mtrl_navigation_bar_colored_ripple_color</item>
+        <item name="itemTextColor">@color/mtrl_navigation_bar_colored_item_tint</item>
+    </style>
+    <style name="Widget.MaterialComponents.NavigationRailView.Colored.Compact" parent="@style/Widget.MaterialComponents.NavigationRailView.Colored">
+        <item name="android:minWidth">@dimen/mtrl_navigation_rail_compact_width</item>
+        <item name="labelVisibilityMode">unlabeled</item>
+    </style>
+    <style name="Widget.MaterialComponents.TabLayout.Colored" parent="@style/Widget.MaterialComponents.TabLayout">
+        <item name="android:background">?colorPrimary</item>
+        <item name="tabIconTint">@color/mtrl_tabs_icon_color_selector_colored</item>
+        <item name="tabIndicatorColor">?colorOnPrimary</item>
+        <item name="tabRippleColor">@color/mtrl_tabs_colored_ripple_color</item>
+        <item name="tabTextColor">@color/mtrl_tabs_icon_color_selector_colored</item>
+    </style>
+    <style name="CustomSeekBarStyle" parent="@style/Widget.AppCompat.SeekBar">
+        <item name="android:maxHeight">4.0dip</item>
+        <item name="android:progressDrawable">@drawable/custom_track</item>
+        <item name="android:thumb">@drawable/custom_thumb</item>
+    </style>
+</resources>
