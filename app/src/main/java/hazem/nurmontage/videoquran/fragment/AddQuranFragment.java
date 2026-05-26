@@ -16,6 +16,7 @@ import android.widget.SpinnerAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import hazem.nurmontage.videoquran.EngineActivity;
 import hazem.nurmontage.videoquran.ProVersionActivity$$ExternalSyntheticBackport0;
 import hazem.nurmontage.videoquran.R;
 import hazem.nurmontage.videoquran.Utils.LocaleHelper;
@@ -577,6 +578,12 @@ public class AddQuranFragment extends Fragment {
             addAyaEntityRecursive(i + 1, i2, i3);
         } catch (Exception e) {
             e.printStackTrace();
+            if (this.iAddQuran != null) {
+                try {
+                    // Hide progress on error to prevent infinite loading
+                    ((EngineActivity) getActivity()).hideProgressSafely();
+                } catch (Exception ignored) {}
+            }
         }
     }
 

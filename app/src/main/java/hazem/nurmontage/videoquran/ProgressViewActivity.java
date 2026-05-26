@@ -760,7 +760,19 @@ public class ProgressViewActivity extends Base {
     /* renamed from: lambda$setupCommand$8$hazem-nurmontage-videoquran-ProgressViewActivity, reason: not valid java name */
     /* synthetic */ void m821x9b61da96(CountDownLatch countDownLatch, List list) {
         try {
-            countDownLatch.await();
+            // Add timeout to prevent infinite waiting
+            if (!countDownLatch.await(120, java.util.concurrent.TimeUnit.SECONDS)) {
+                // Timeout reached - something went wrong
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            toStudio();
+                        } catch (Exception ignored) {}
+                    }
+                });
+                return;
+            }
             if (Thread.currentThread().isInterrupted() && this.isDestroy) {
                 return;
             }

@@ -72,4 +72,24 @@ public class Base extends AppCompatActivity {
         } catch (Exception unused) {
         }
     }
+
+    /**
+     * Safely hide progress - ensures hideProgressFragment and hideFragment
+     * are called on the UI thread.
+     */
+    public void hideProgressSafely() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    hideProgressFragment();
+                    hideFragment();
+                } catch (Exception ignored) {}
+            }
+        });
+    }
+
+    // Stubs - overridden in EngineActivity
+    public void hideProgressFragment() {}
+    public void hideFragment() {}
 }

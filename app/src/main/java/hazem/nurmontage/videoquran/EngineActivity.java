@@ -1906,6 +1906,7 @@ public class EngineActivity extends Base {
                 if (entityQuranTimeline2 != entityQuranTimeline) {
                     if (entityQuranTimeline.getTransition() == null) {
                         entityQuranTimeline2.setTransition(null);
+                        EngineActivity.this.hideProgressFragment();
                         return;
                     }
                     if (entityQuranTimeline2.getTransition() == null) {
@@ -2020,6 +2021,7 @@ public class EngineActivity extends Base {
             for (EntityQuranTimeline entityQuranTimeline : EngineActivity.this.trackViewEntity.getEntityListQuran()) {
                 if (entityBismilahTimeline.getTransition() == null) {
                     entityQuranTimeline.setTransition(null);
+                    EngineActivity.this.hideProgressFragment();
                     return;
                 }
                 if (entityQuranTimeline.getTransition() == null) {
@@ -7587,12 +7589,13 @@ public class EngineActivity extends Base {
     /* JADX INFO: Access modifiers changed from: private */
     public void updateTime() {
         this.trackViewEntity.calculMaxTime();
-        updateViewTime(this.trackViewEntity.getMaxTime(), this.trackViewEntity.getCurrent_cursur_position());
-        if (this.trackViewEntity.getCurrent_cursur_position() <= this.trackViewEntity.getMaxTime()) {
+        long maxTime = this.trackViewEntity.getMaxTime();
+        updateViewTime((int) maxTime, (int) this.trackViewEntity.getCurrent_cursur_position());
+        if (maxTime > 0 && this.trackViewEntity.getCurrent_cursur_position() <= maxTime) {
             updateTime(this.trackViewEntity.getCurrent_cursur_position());
             TrackEntityView trackEntityView = this.trackViewEntity;
             trackEntityView.setCurrent_cursur_position(trackEntityView.getCurrent_cursur_position());
-            this.blurredImageView.setProgress(this.trackViewEntity.getCurrent_cursur_position() / this.trackViewEntity.getMaxTime());
+            this.blurredImageView.setProgress((float) this.trackViewEntity.getCurrent_cursur_position() / maxTime);
         }
     }
 
@@ -7600,12 +7603,13 @@ public class EngineActivity extends Base {
     public void updateTimeToEndAya() {
         this.trackViewEntity.calculMaxTime();
         this.trackViewEntity.translateToEnd();
-        updateViewTime(this.trackViewEntity.getMaxTime(), this.trackViewEntity.getCurrent_cursur_position());
-        if (this.trackViewEntity.getCurrent_cursur_position() <= this.trackViewEntity.getMaxTime()) {
+        long maxTime = this.trackViewEntity.getMaxTime();
+        updateViewTime((int) maxTime, (int) this.trackViewEntity.getCurrent_cursur_position());
+        if (maxTime > 0 && this.trackViewEntity.getCurrent_cursur_position() <= maxTime) {
             updateTime(this.trackViewEntity.getCurrent_cursur_position());
             TrackEntityView trackEntityView = this.trackViewEntity;
             trackEntityView.setCurrent_cursur_position(trackEntityView.getCurrent_cursur_position());
-            this.blurredImageView.setProgress(this.trackViewEntity.getCurrent_cursur_position() / this.trackViewEntity.getMaxTime());
+            this.blurredImageView.setProgress((float) this.trackViewEntity.getCurrent_cursur_position() / maxTime);
         }
     }
 
