@@ -974,14 +974,15 @@ public class TrackEntityView extends FrameLayout implements View.OnTouchListener
         float width = (int) (getWidth() * 0.015f);
         int width2 = (int) (getWidth() * 0.104f);
         float width3 = (int) (getWidth() * 0.03f);
-        float iconWidth = (int) (getWidth() * 0.07f);
-        RectF rectF = new RectF(width3, (int) this.start_y_draw, iconWidth + width2, iconWidth + width2);
+        int start_y_int = (int) this.start_y_draw;
+        RectF rectF = new RectF(width3, start_y_int, width3 + width2, start_y_int + width2);
         canvas.drawRoundRect(rectF, width, width, paint);
         Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.add_audio);
         drawable.setTint(-1052689);
         drawable.setBounds((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom);
         drawable.draw(canvas);
-        RectF rectF2 = new RectF(rectF.left, (int) (rectF.bottom + width3), rectF.right, iconWidth + width2);
+        int bottomY = (int) (rectF.bottom + width3);
+        RectF rectF2 = new RectF(rectF.left, bottomY, rectF.right, bottomY + width2);
         canvas.drawRoundRect(rectF2, width, width, paint);
         Drawable drawable2 = ContextCompat.getDrawable(getContext(), R.drawable.add_quran);
         drawable2.setTint(-1052689);
@@ -2206,7 +2207,7 @@ public class TrackEntityView extends FrameLayout implements View.OnTouchListener
 
     public void translateToEnd() {
         this.current_cursur_position = this.maxTime;
-        float f = ((-this.current_cursur_position) * this.second_in_screen) / 1000.0f;
+        float f = ((-this.maxTime) * this.second_in_screen) / 1000.0f;
         this.currentPosition = f;
         this.scrolled_with_zoom = f * this.scaleFactor;
         invalidate();

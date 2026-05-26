@@ -2,6 +2,7 @@ package hazem.nurmontage.videoquran.Utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 import java.io.File;
@@ -49,85 +50,22 @@ public class UtilsFile {
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:19:0x003e, code lost:
-    
-        if (r8 == null) goto L22;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:5:0x002d, code lost:
-    
-        if (r8 != null) goto L14;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:6:0x002f, code lost:
-    
-        r8.close();
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:7:0x0041, code lost:
-    
-        return null;
-     */
-    /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:24:0x0046  */
-    /* JADX WARN: Type inference failed for: r0v2 */
-    /* JADX WARN: Type inference failed for: r0v3, types: [android.database.Cursor] */
-    /* JADX WARN: Type inference failed for: r0v4 */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public static java.lang.String getDataColumn(android.content.Context r8, android.net.Uri r9, java.lang.String r10, java.lang.String[] r11) {
-        /*
-            r0 = 1
-            java.lang.String[] r3 = new java.lang.String[r0]
-            r0 = 0
-            java.lang.String r7 = "_data"
-            r3[r0] = r7
-            r0 = 0
-            android.content.ContentResolver r1 = r8.getContentResolver()     // Catch: java.lang.Throwable -> L33 java.lang.Exception -> L35
-            r6 = 0
-            r2 = r9
-            r4 = r10
-            r5 = r11
-            android.database.Cursor r8 = r1.query(r2, r3, r4, r5, r6)     // Catch: java.lang.Throwable -> L33 java.lang.Exception -> L35
-            if (r8 == 0) goto L2d
-            boolean r9 = r8.moveToFirst()     // Catch: java.lang.Exception -> L2b java.lang.Throwable -> L42
-            if (r9 == 0) goto L2d
-            int r9 = r8.getColumnIndexOrThrow(r7)     // Catch: java.lang.Exception -> L2b java.lang.Throwable -> L42
-            java.lang.String r9 = r8.getString(r9)     // Catch: java.lang.Exception -> L2b java.lang.Throwable -> L42
-            if (r8 == 0) goto L2a
-            r8.close()
-        L2a:
-            return r9
-        L2b:
-            r9 = move-exception
-            goto L37
-        L2d:
-            if (r8 == 0) goto L41
-        L2f:
-            r8.close()
-            goto L41
-        L33:
-            r9 = move-exception
-            goto L44
-        L35:
-            r9 = move-exception
-            r8 = r0
-        L37:
-            java.lang.String r10 = "UtilsFile"
-            java.lang.String r11 = "Error getting data column"
-            android.util.Log.e(r10, r11, r9)     // Catch: java.lang.Throwable -> L42
-            if (r8 == 0) goto L41
-            goto L2f
-        L41:
-            return r0
-        L42:
-            r9 = move-exception
-            r0 = r8
-        L44:
-            if (r0 == 0) goto L49
-            r0.close()
-        L49:
-            throw r9
-        */
-        throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.Utils.UtilsFile.getDataColumn(android.content.Context, android.net.Uri, java.lang.String, java.lang.String[]):java.lang.String");
+    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        String[] projection = {"_data"};
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
+            }
+            return null;
+        } catch (Exception e) {
+            Log.e("UtilsFile", "Error getting data column", e);
+            return null;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 }

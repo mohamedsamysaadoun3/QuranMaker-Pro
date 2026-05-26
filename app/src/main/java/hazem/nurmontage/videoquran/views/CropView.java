@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -374,94 +375,50 @@ public class CropView extends View {
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:17:0x0033, code lost:
-    
-        if (r2 != 6) goto L35;
-     */
     @Override // android.view.View
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public boolean onTouchEvent(android.view.MotionEvent r8) {
-        /*
-            r7 = this;
-            android.animation.ValueAnimator r0 = r7.hintAnimator
-            r1 = 1
-            if (r0 == 0) goto L12
-            boolean r0 = r0.isRunning()
-            if (r0 == 0) goto L12
-            android.animation.ValueAnimator r0 = r7.hintAnimator
-            r0.cancel()
-            r7.hintAnimationPlayed = r1
-        L12:
-            android.view.ScaleGestureDetector r0 = r7.scaleGestureDetector
-            boolean r0 = r0.onTouchEvent(r8)
-            int r2 = r8.getActionMasked()
-            float r3 = r8.getX()
-            float r4 = r8.getY()
-            if (r2 == 0) goto L67
-            r5 = 0
-            if (r2 == r1) goto L5e
-            r6 = 2
-            if (r2 == r6) goto L3c
-            r3 = 3
-            if (r2 == r3) goto L39
-            r3 = 5
-            if (r2 == r3) goto L36
-            r3 = 6
-            if (r2 == r3) goto L5e
-            goto L75
-        L36:
-            r7.isDragging = r5
-            goto L75
-        L39:
-            r7.isDragging = r5
-            goto L75
-        L3c:
-            android.view.ScaleGestureDetector r5 = r7.scaleGestureDetector
-            boolean r5 = r5.isInProgress()
-            if (r5 != 0) goto L75
-            boolean r5 = r7.isDragging
-            if (r5 == 0) goto L75
-            int r5 = r8.getPointerCount()
-            if (r5 != r1) goto L75
-            float r5 = r7.startX
-            float r5 = r3 - r5
-            float r6 = r7.startY
-            float r6 = r4 - r6
-            r7.moveCropRect(r5, r6)
-            r7.startX = r3
-            r7.startY = r4
-            goto L75
-        L5e:
-            int r3 = r8.getActionIndex()
-            if (r3 != 0) goto L75
-            r7.isDragging = r5
-            goto L75
-        L67:
-            android.view.ScaleGestureDetector r5 = r7.scaleGestureDetector
-            boolean r5 = r5.isInProgress()
-            if (r5 != 0) goto L75
-            r7.isDragging = r1
-            r7.startX = r3
-            r7.startY = r4
-        L75:
-            if (r0 == 0) goto L7b
-            r7.invalidate()
-            return r1
-        L7b:
-            boolean r0 = r7.isDragging
-            if (r0 != 0) goto L87
-            if (r2 != 0) goto L82
-            goto L87
-        L82:
-            boolean r8 = super.onTouchEvent(r8)
-            return r8
-        L87:
-            r7.invalidate()
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.views.CropView.onTouchEvent(android.view.MotionEvent):boolean");
+    public boolean onTouchEvent(MotionEvent event) {
+        if (this.hintAnimator != null && this.hintAnimator.isRunning()) {
+            this.hintAnimator.cancel();
+            this.hintAnimationPlayed = true;
+        }
+        boolean scaleResult = this.scaleGestureDetector.onTouchEvent(event);
+        int action = event.getActionMasked();
+        float x = event.getX();
+        float y = event.getY();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                if (!this.scaleGestureDetector.isInProgress()) {
+                    this.isDragging = true;
+                    this.startX = x;
+                    this.startY = y;
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (!this.scaleGestureDetector.isInProgress() && this.isDragging && event.getPointerCount() == 1) {
+                    float dx = x - this.startX;
+                    float dy = y - this.startY;
+                    moveCropRect(dx, dy);
+                    this.startX = x;
+                    this.startY = y;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                if (event.getActionIndex() == 0) {
+                    this.isDragging = false;
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                this.isDragging = false;
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                this.isDragging = false;
+                break;
+        }
+        if (scaleResult || this.isDragging || action == MotionEvent.ACTION_DOWN) {
+            invalidate();
+            return true;
+        }
+        return super.onTouchEvent(event);
     }
 }

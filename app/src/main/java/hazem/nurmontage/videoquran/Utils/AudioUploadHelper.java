@@ -1,23 +1,82 @@
 package hazem.nurmontage.videoquran.Utils;
 
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /* loaded from: classes2.dex */
 public class AudioUploadHelper {
     private static final String TAG = "AudioUploadHelper";
 
-    /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:71:0x00df A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r4v0 */
-    /* JADX WARN: Type inference failed for: r4v1, types: [java.io.InputStream] */
-    /* JADX WARN: Type inference failed for: r4v2 */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public static java.io.File processAudioUriForUpload(android.content.Context r7, android.net.Uri r8, java.lang.String r9) {
-        /*
-            Method dump skipped, instructions count: 232
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.Utils.AudioUploadHelper.processAudioUriForUpload(android.content.Context, android.net.Uri, java.lang.String):java.io.File");
+    public static File processAudioUriForUpload(Context context, Uri uri, String str) {
+        InputStream inputStream = null;
+        File file = null;
+        try {
+            inputStream = context.getContentResolver().openInputStream(uri);
+            if (inputStream == null) {
+                Log.e(TAG, "Failed to open InputStream for URI: " + uri);
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error closing InputStream", e);
+                    }
+                }
+                return null;
+            }
+            file = new File(context.getExternalFilesDir(null), str);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            try {
+                byte[] bArr = new byte[4096];
+                while (true) {
+                    int read = inputStream.read(bArr);
+                    if (read == -1) {
+                        break;
+                    }
+                    fileOutputStream.write(bArr, 0, read);
+                }
+                fileOutputStream.flush();
+            } finally {
+                fileOutputStream.close();
+            }
+            Log.d(TAG, "Audio content copied to cache file: " + file.getAbsolutePath());
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e2) {
+                    Log.e(TAG, "Error closing InputStream", e2);
+                }
+            }
+            return file;
+        } catch (FileNotFoundException e3) {
+            Log.e(TAG, "File not found for URI (or permission issue): " + uri, e3);
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e4) {
+                    Log.e(TAG, "Error closing InputStream", e4);
+                }
+            }
+            return null;
+        } catch (IOException e5) {
+            Log.e(TAG, "IOException while processing URI: " + uri, e5);
+            if (file != null && file.exists()) {
+                file.delete();
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e6) {
+                    Log.e(TAG, "Error closing InputStream", e6);
+                }
+            }
+            return null;
+        }
     }
 }

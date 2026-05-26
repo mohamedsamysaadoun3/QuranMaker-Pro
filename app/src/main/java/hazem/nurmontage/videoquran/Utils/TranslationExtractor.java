@@ -1,6 +1,7 @@
 package hazem.nurmontage.videoquran.Utils;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import com.bumptech.glide.load.Key;
 import hazem.nurmontage.videoquran.ProVersionActivity$$ExternalSyntheticBackport0;
@@ -8,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -19,6 +21,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import org.json.JSONObject;
 
 /* loaded from: classes2.dex */
@@ -106,18 +109,69 @@ public class TranslationExtractor {
         return new LinkedHashMap();
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:57:0x0167 A[Catch: IOException -> 0x0163, TRY_LEAVE, TryCatch #3 {IOException -> 0x0163, blocks: (B:66:0x015f, B:57:0x0167), top: B:65:0x015f }] */
-    /* JADX WARN: Removed duplicated region for block: B:64:? A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:65:0x015f A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public static void extractTranslationsBySurahAndAyah(android.content.Context r16) {
-        /*
-            Method dump skipped, instructions count: 367
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.Utils.TranslationExtractor.extractTranslationsBySurahAndAyah(android.content.Context):void");
+    public static void extractTranslationsBySurahAndAyah(Context context) {
+        BufferedReader bufferedReader = null;
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(
+                    context.getAssets().open("salamquran_quran_words.txt"), "UTF-8"));
+            File dir = new File(Environment.getExternalStorageDirectory(), "QuranTranslations");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File outFile = new File(dir, "translations.txt");
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(outFile), "UTF-8"));
+            Pattern pattern = Pattern.compile("^\\(\\s*\\d+\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,.*'([^']*)'\\s*\\)$");
+            StringBuilder sb = new StringBuilder();
+            int prevSurah = -1;
+            int prevAyah = -1;
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                line = line.trim();
+                if (line.endsWith(",")) {
+                    line = line.substring(0, line.length() - 1);
+                }
+                java.util.regex.Matcher matcher = pattern.matcher(line);
+                if (!matcher.find()) {
+                    continue;
+                }
+                int surah = Integer.parseInt(matcher.group(1));
+                int ayah = Integer.parseInt(matcher.group(2));
+                String word = matcher.group(3);
+                if (prevSurah != -1 && prevAyah != -1) {
+                    if (ayah != prevSurah || surah != prevAyah) {
+                        String entry = prevSurah + "|" + prevAyah + " "
+                                + sb.toString().replaceAll("\\s+", ",").replaceAll(", $", "");
+                        bufferedWriter.write(entry);
+                        bufferedWriter.newLine();
+                        sb.setLength(0);
+                    }
+                }
+                sb.append(word).append(", ");
+                prevAyah = surah;
+                prevSurah = ayah;
+            }
+            if (sb.length() > 0 && prevSurah != -1 && prevAyah != -1) {
+                String entry = prevSurah + "|" + prevAyah + " "
+                        + sb.toString().replaceAll(", $", "");
+                bufferedWriter.write(entry);
+            }
+            bufferedWriter.flush();
+            System.out.println("\u2705 Translations saved to: " + outFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bufferedReader != null) bufferedReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bufferedWriter != null) bufferedWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

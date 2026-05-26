@@ -40,6 +40,7 @@ import hazem.nurmontage.videoquran.Utils.AspectRatioCalculator;
 import hazem.nurmontage.videoquran.Utils.ColorSchemeGenerator;
 import hazem.nurmontage.videoquran.Utils.ColorUtils;
 import hazem.nurmontage.videoquran.Utils.CreateGradient;
+import hazem.nurmontage.videoquran.Utils.FontUtils;
 import hazem.nurmontage.videoquran.Utils.Utils;
 import hazem.nurmontage.videoquran.Utils.UtilsFileLast;
 import hazem.nurmontage.videoquran.common.Common;
@@ -55,6 +56,8 @@ import hazem.nurmontage.videoquran.model.EntityView;
 import hazem.nurmontage.videoquran.model.Gradient;
 import hazem.nurmontage.videoquran.model.QuranEntity;
 import hazem.nurmontage.videoquran.model.SurahNameEntity;
+import hazem.nurmontage.videoquran.model.Template;
+import hazem.nurmontage.videoquran.model.TimeModel;
 import hazem.nurmontage.videoquran.model.Transition;
 import hazem.nurmontage.videoquran.model.TranslationQuranEntity;
 import hazem.nurmontage.videoquran.multitouch.MoveGestureDetector;
@@ -3815,18 +3818,94 @@ public class BlurredImageView extends View implements View.OnTouchListener {
         drawable5.draw(canvas);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:22:0x0167  */
-    /* JADX WARN: Removed duplicated region for block: B:29:0x019c  */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public java.lang.String setupBitmapDraw(android.graphics.Bitmap r19, android.graphics.Bitmap r20, hazem.nurmontage.videoquran.model.Template r21) {
-        /*
-            Method dump skipped, instructions count: 511
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.views.BlurredImageView.setupBitmapDraw(android.graphics.Bitmap, android.graphics.Bitmap, hazem.nurmontage.videoquran.model.Template):java.lang.String");
+    public String setupBitmapDraw(Bitmap bitmapBlured, Bitmap bitmapSquare, Template template) {
+        this.frameInterval = (long) (1000 / template.getFps());
+        this.bitmapBlured = bitmapBlured;
+        this.bitmapSquare = bitmapSquare;
+
+        if (this.surahNameEntity != null) {
+            this.surahNameEntity.setCopyRect();
+        }
+
+        createRect();
+
+        String filename = "bg_" + System.currentTimeMillis() + ".png";
+        File file = new File(template.getFolder_template());
+        Bitmap bitmap = getBitmapDraw(template.isVideoSquare(), file);
+
+        FontUtils.copyFontToInternalStorage(getContext(), "NotoNaskhArabic.ttf");
+
+        float strokeWidth = this.linePaint.getStrokeWidth() * 4.2f;
+        if (template.getIpad_type() == IpadType.BLACK_LAYER.ordinal()
+                || template.getIpad_type() == IpadType.BLUE_TYPE.ordinal()
+                || template.getIpad_type() == IpadType.GRADIENT.ordinal()
+                || template.getIpad_type() == IpadType.MASK_BRUSH.ordinal()
+                || template.getIpad_type() == IpadType.HEART.ordinal()
+                || this.mIpadType == IpadType.BATTERY.ordinal()) {
+            strokeWidth = 0.0f;
+        }
+
+        float startShape = 0;
+        int widthShape = 0;
+        int heightShape = 0;
+
+        if (template.getIpad_type() == IpadType.BLUE_TYPE.ordinal()) {
+            saveProgressBitmapTypeBlue(file);
+        } else if (template.getIpad_type() == IpadType.IPAD_NEOMORPHIC.ordinal()) {
+            saveProgressBitmapTypeIPAD_NEOMORPHIC(file, bitmap);
+        } else if (template.getIpad_type() == IpadType.HEART.ordinal()) {
+            Pair<Float, Integer> pair = saveProgressBitmapTypeHeart(file, bitmap);
+            startShape = pair.first;
+            heightShape = pair.second;
+        } else if (this.mIpadType == IpadType.BATTERY.ordinal()) {
+            Pair<Float, Point> pair = saveProgressBitmapTypeBattery(file, bitmap);
+            startShape = pair.first;
+            widthShape = pair.second.x;
+            heightShape = pair.second.y;
+        } else if (this.mIpadType == IpadType.CASSET.ordinal()
+                || this.mIpadType == IpadType.CASSET_IMG.ordinal()
+                || this.mIpadType == IpadType.CASSET_IMG_BLUR.ordinal()) {
+            startShape = this.rectFProgress.left;
+            widthShape = (int) this.rectFProgress.right;
+            heightShape = (int) this.rectFProgress.top;
+        } else {
+            saveProgressBitmap(file, strokeWidth);
+        }
+
+        drawEntityBitmap(file, bitmap.getWidth(), bitmap.getHeight());
+        saveBg(filename, bitmap, file);
+
+        TimeModel timeModel = template.getmTimeModel();
+        int progressOffset = Math.round(strokeWidth * 1.98f);
+
+        if (timeModel == null) {
+            String color = this.paintText.getColor() == -1 ? "white" : "black";
+            timeModel = new TimeModel(
+                    (int) this.rectFProgress.width(),
+                    (int) (this.rectFProgress.height() * 1.5f),
+                    this.paintText.getTextSize() * 0.96f,
+                    color,
+                    this.txt_y,
+                    this.newLeft_txt,
+                    progressOffset
+            );
+        } else {
+            String color = this.paintText.getColor() == -1 ? "white" : "black";
+            timeModel.setColor(color);
+            timeModel.setPosXRight(this.newLeft_txt);
+            timeModel.setPosY(this.txt_y);
+            timeModel.setHeight_bitmap_progress((int) (this.rectFProgress.height() * 1.5f));
+            timeModel.setWidth_bitmap_progress((int) this.rectFProgress.width());
+            timeModel.setSize(this.paintText.getTextSize() * 0.96f);
+            timeModel.setProgress_offset(progressOffset);
+        }
+
+        timeModel.setStartShape(startShape);
+        timeModel.setWidthShape(widthShape);
+        timeModel.setHeightShape(heightShape);
+        template.setmTimeModel(timeModel);
+
+        return file.getAbsolutePath() + "/" + filename;
     }
 
     private void saveBg(String str, Bitmap bitmap, File file) {

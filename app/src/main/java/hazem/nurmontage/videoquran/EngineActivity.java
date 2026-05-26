@@ -2617,16 +2617,190 @@ public class EngineActivity extends Base {
                         /* JADX WARN: Removed duplicated region for block: B:45:0x08d3 A[Catch: Exception -> 0x0919, TryCatch #0 {Exception -> 0x0919, blocks: (B:3:0x0004, B:5:0x0092, B:6:0x0120, B:8:0x0169, B:10:0x017d, B:12:0x0191, B:14:0x01a5, B:16:0x01b9, B:19:0x01cf, B:21:0x01e3, B:23:0x0250, B:24:0x0272, B:26:0x0286, B:31:0x02ae, B:34:0x0690, B:36:0x069e, B:37:0x08ae, B:39:0x08c2, B:40:0x08ec, B:45:0x08d3, B:49:0x06d7, B:50:0x0326, B:52:0x033a, B:54:0x034e, B:57:0x0364, B:59:0x03d4, B:60:0x03f6, B:62:0x0409, B:67:0x0431, B:68:0x04b2, B:70:0x0528, B:71:0x054a, B:73:0x055d, B:78:0x0585, B:80:0x059e, B:81:0x061a, B:82:0x0710, B:84:0x0720, B:85:0x078f, B:87:0x07ff, B:88:0x0821, B:90:0x0834, B:95:0x085c, B:97:0x0875, B:98:0x0898, B:99:0x088d, B:100:0x0758, B:101:0x00bb, B:103:0x00cf, B:104:0x00f8), top: B:2:0x0004 }] */
                         /* JADX WARN: Removed duplicated region for block: B:49:0x06d7 A[Catch: Exception -> 0x0919, TryCatch #0 {Exception -> 0x0919, blocks: (B:3:0x0004, B:5:0x0092, B:6:0x0120, B:8:0x0169, B:10:0x017d, B:12:0x0191, B:14:0x01a5, B:16:0x01b9, B:19:0x01cf, B:21:0x01e3, B:23:0x0250, B:24:0x0272, B:26:0x0286, B:31:0x02ae, B:34:0x0690, B:36:0x069e, B:37:0x08ae, B:39:0x08c2, B:40:0x08ec, B:45:0x08d3, B:49:0x06d7, B:50:0x0326, B:52:0x033a, B:54:0x034e, B:57:0x0364, B:59:0x03d4, B:60:0x03f6, B:62:0x0409, B:67:0x0431, B:68:0x04b2, B:70:0x0528, B:71:0x054a, B:73:0x055d, B:78:0x0585, B:80:0x059e, B:81:0x061a, B:82:0x0710, B:84:0x0720, B:85:0x078f, B:87:0x07ff, B:88:0x0821, B:90:0x0834, B:95:0x085c, B:97:0x0875, B:98:0x0898, B:99:0x088d, B:100:0x0758, B:101:0x00bb, B:103:0x00cf, B:104:0x00f8), top: B:2:0x0004 }] */
                         @Override // com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
-                        /*
-                            Code decompiled incorrectly, please refer to instructions dump.
-                            To view partially-correct add '--show-bad-code' argument
-                        */
                         public void apply(com.arthenica.ffmpegkit.FFmpegSession r19) {
-                            /*
-                                Method dump skipped, instructions count: 2533
-                                To view this dump add '--comments-level debug' option
-                            */
-                            throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.EngineActivity.AnonymousClass15.AnonymousClass1.apply(com.arthenica.ffmpegkit.FFmpegSession):void");
+                            Bitmap bitmapSquare;
+                            Rect rect;
+                            try {
+                                EngineActivity.this.mTemplate.setFrame_bg(file.getAbsolutePath());
+                                Bitmap bitmap = (Bitmap) Glide.with((FragmentActivity) EngineActivity.this).asBitmap().load(EngineActivity.this.mTemplate.getFrame_bg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(height, height).submit().get();
+                                EngineActivity.this.blurredImageView.setGlass(EngineActivity.this.mTemplate.isGlass());
+                                EngineActivity.this.blurredImageView.setVideo(true);
+                                EngineActivity.this.blurredImageView.setBitmapOriginal(bitmap);
+                                Bitmap croppedBitmap;
+                                if (EngineActivity.this.mTemplate.geTypeResize() == ResizeType.SOCIAL_STORY.ordinal()) {
+                                    croppedBitmap = BitmapCropper.cropTo9x16(EngineActivity.this.blurredImageView.getBitmapOriginal(), EngineActivity.this.blurredImageView.getW(), EngineActivity.this.blurredImageView.getH());
+                                } else if (EngineActivity.this.mTemplate.geTypeResize() == ResizeType.SQUARE.ordinal()) {
+                                    croppedBitmap = BitmapCropper.cropTo1x1(EngineActivity.this.blurredImageView.getBitmapOriginal(), EngineActivity.this.blurredImageView.getW(), EngineActivity.this.blurredImageView.getH());
+                                } else {
+                                    croppedBitmap = BitmapCropper.cropTo16x9(EngineActivity.this.blurredImageView.getBitmapOriginal(), EngineActivity.this.blurredImageView.getW(), EngineActivity.this.blurredImageView.getH());
+                                }
+                                EngineActivity.this.blurredImageView.updatePosCanvas(croppedBitmap);
+                                EngineActivity.this.blurredImageView.updateIpad(croppedBitmap, EngineActivity.this.mTemplate.getIpad_type(), EngineActivity.this.mTemplate.geTypeResize());
+                                int ipadType = EngineActivity.this.mTemplate.getIpad_type();
+                                if (ipadType == IpadType.BLACK_LAYER.ordinal() || ipadType == IpadType.GRADIENT.ordinal() || ipadType == IpadType.MASK_BRUSH.ordinal() || ipadType == IpadType.BLUE_TYPE.ordinal() || ipadType == IpadType.CASSET_IMG.ordinal() || ipadType == IpadType.CASSET_IMG_BLUR.ordinal()) {
+                                    if (EngineActivity.this.mTemplate.getGradient() != null) {
+                                        EngineActivity.this.blurredImageView.setBitmap(UtilsBitmap.blur(EngineActivity.this, croppedBitmap, 20, 1), null, EngineActivity.this.mTemplate.getGradient(), EngineActivity.this.mTemplate.getIpad_type(), EngineActivity.this.mTemplate.geTypeResize(), null);
+                                    } else {
+                                        EngineActivity.this.blurredImageView.setBitmap(UtilsBitmap.blur(EngineActivity.this, croppedBitmap, 20, 1), null, EngineActivity.this.mTemplate.getColor_ipad(), EngineActivity.this.mTemplate.getIpad_type(), EngineActivity.this.mTemplate.geTypeResize(), null);
+                                    }
+                                    int width3 = (int) (EngineActivity.this.blurredImageView.getIpad_rect().width() * 1.0f);
+                                    int height3 = (int) (croppedBitmap.getHeight() * 0.5355f);
+                                    int round3 = Math.round(EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth() * EngineActivity.this.mTemplate.getX_square());
+                                    int round4 = Math.round(EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight() * EngineActivity.this.mTemplate.getY_square());
+                                    int i5 = width3 + round3;
+                                    if (i5 > EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth()) {
+                                        round3 -= i5 - EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth();
+                                        i5 = EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth();
+                                    }
+                                    int i6 = height3 + round4;
+                                    if (i6 > EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight()) {
+                                        round4 -= i6 - EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight();
+                                        i6 = EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight();
+                                    }
+                                    if (round3 < 0) {
+                                        round3 = 0;
+                                    }
+                                    if (round4 < 0) {
+                                        round4 = 0;
+                                    }
+                                    Rect rect3 = new Rect(round3, round4, i5, i6);
+                                    if (ipadType == IpadType.CASSET_IMG_BLUR.ordinal()) {
+                                        EngineActivity.this.blurredImageView.setBitmapSquare(EngineActivity.this.blurredImageView.getBitmapBlured());
+                                    } else {
+                                        EngineActivity.this.blurredImageView.setBitmapSquare(croppedBitmap);
+                                    }
+                                    EngineActivity.this.blurredImageView.setRadius_square(0);
+                                    EngineActivity.this.blurredImageView.setRectSquare(rect3);
+                                    bitmapSquare = croppedBitmap;
+                                    rect = rect3;
+                                } else if (ipadType == IpadType.IPAD_NEOMORPHIC.ordinal()) {
+                                    int width = (int) (EngineActivity.this.blurredImageView.getIpad_rect().width() * 0.6f);
+                                    int round = Math.round(EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth() * EngineActivity.this.mTemplate.getX_square());
+                                    int round2 = Math.round(EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight() * EngineActivity.this.mTemplate.getY_square());
+                                    int i3 = width + round;
+                                    if (i3 > EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth()) {
+                                        round -= i3 - EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth();
+                                        i3 = EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth();
+                                    }
+                                    int i4 = width + round2;
+                                    if (i4 > EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight()) {
+                                        round2 -= i4 - EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight();
+                                        i4 = EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight();
+                                    }
+                                    if (round < 0) {
+                                        round = 0;
+                                    }
+                                    if (round2 < 0) {
+                                        round2 = 0;
+                                    }
+                                    Rect rect2 = new Rect(round, round2, i3, i4);
+                                    EngineActivity.this.blurredImageView.setRadius_square(width);
+                                    int width2 = (int) (EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth() * EngineActivity.this.mTemplate.getWidth_square());
+                                    int height2 = (int) (EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight() * EngineActivity.this.mTemplate.getHeight_square());
+                                    Bitmap cropToSquareWithRoundCorners = UtilsBitmap.cropToSquareWithRoundCorners(EngineActivity.this.blurredImageView.getBitmapOriginal(), rect2, width, width2, height2);
+                                    rect2.right = rect2.left + width2;
+                                    rect2.bottom = rect2.top + height2;
+                                    EngineActivity.this.blurredImageView.setRectSquare(rect2);
+                                    bitmapSquare = cropToSquareWithRoundCorners;
+                                    rect = rect2;
+                                } else if (ipadType == IpadType.IPAD.ordinal() || ipadType == IpadType.IPAD_UNBLUR.ordinal() || ipadType == IpadType.IPAD_CLASSIC.ordinal()) {
+                                    int width5 = (int) (EngineActivity.this.blurredImageView.getIpad_rect().width() * 0.87530595f);
+                                    int i7 = (int) (width5 * 1.13f);
+                                    int min = Math.min(width5, i7);
+                                    int round5 = Math.round(EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth() * EngineActivity.this.mTemplate.getX_square());
+                                    int round6 = Math.round(EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight() * EngineActivity.this.mTemplate.getY_square());
+                                    int i8 = width5 + round5;
+                                    if (i8 > EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth()) {
+                                        round5 -= i8 - EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth();
+                                        i8 = EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth();
+                                    }
+                                    int i9 = i7 + round6;
+                                    if (i9 > EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight()) {
+                                        round6 -= i9 - EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight();
+                                        i9 = EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight();
+                                    }
+                                    if (round5 < 0) {
+                                        round5 = 0;
+                                    }
+                                    if (round6 < 0) {
+                                        round6 = 0;
+                                    }
+                                    Rect rect4 = new Rect(round5, round6, i8, i9);
+                                    if (ipadType == IpadType.IPAD_CLASSIC.ordinal()) {
+                                        int width6 = (int) (EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth() * EngineActivity.this.mTemplate.getWidth_square());
+                                        int height5 = (int) (EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight() * EngineActivity.this.mTemplate.getHeight_square());
+                                        Bitmap cropToSquare2 = UtilsBitmap.cropToSquare(EngineActivity.this.blurredImageView.getBitmapOriginal(), rect4, width6, height5);
+                                        EngineActivity.this.blurredImageView.setBitmapSquare(cropToSquare2);
+                                        EngineActivity.this.blurredImageView.setRadius_square(0);
+                                        rect4.right = rect4.left + width6;
+                                        rect4.bottom = rect4.top + height5;
+                                        EngineActivity.this.blurredImageView.setRectSquare(rect4);
+                                        bitmapSquare = cropToSquare2;
+                                    } else {
+                                        int i10 = (int) (min * 0.10800001f);
+                                        EngineActivity.this.blurredImageView.setRadius_square(i10);
+                                        int width7 = (int) (EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth() * EngineActivity.this.mTemplate.getWidth_square());
+                                        int height6 = (int) (EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight() * EngineActivity.this.mTemplate.getHeight_square());
+                                        bitmapSquare = UtilsBitmap.cropToSquareWithRoundCorners(EngineActivity.this.blurredImageView.getBitmapOriginal(), rect4, i10, width7, height6);
+                                        rect4.right = rect4.left + width7;
+                                        rect4.bottom = rect4.top + height6;
+                                        EngineActivity.this.blurredImageView.setRectSquare(rect4);
+                                    }
+                                    rect = rect4;
+                                } else {
+                                    int width3 = (int) (EngineActivity.this.blurredImageView.getIpad_rect().width() * 1.0f);
+                                    int height3 = (int) (croppedBitmap.getHeight() * 0.5355f);
+                                    int round3 = Math.round(EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth() * EngineActivity.this.mTemplate.getX_square());
+                                    int round4 = Math.round(EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight() * EngineActivity.this.mTemplate.getY_square());
+                                    int i5 = width3 + round3;
+                                    if (i5 > EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth()) {
+                                        round3 -= i5 - EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth();
+                                        i5 = EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth();
+                                    }
+                                    int i6 = height3 + round4;
+                                    if (i6 > EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight()) {
+                                        round4 -= i6 - EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight();
+                                        i6 = EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight();
+                                    }
+                                    if (round3 < 0) {
+                                        round3 = 0;
+                                    }
+                                    if (round4 < 0) {
+                                        round4 = 0;
+                                    }
+                                    Rect rect3 = new Rect(round3, round4, i5, i6);
+                                    int width4 = (int) (EngineActivity.this.blurredImageView.getBitmapOriginal().getWidth() * EngineActivity.this.mTemplate.getWidth_square());
+                                    int height4 = (int) (EngineActivity.this.blurredImageView.getBitmapOriginal().getHeight() * EngineActivity.this.mTemplate.getHeight_square());
+                                    Bitmap cropToSquare = UtilsBitmap.cropToSquare(EngineActivity.this.blurredImageView.getBitmapOriginal(), rect3, width4, height4);
+                                    EngineActivity.this.blurredImageView.setBitmapSquare(cropToSquare);
+                                    EngineActivity.this.blurredImageView.setRadius_square(0);
+                                    rect3.right = rect3.left + width4;
+                                    rect3.bottom = rect3.top + height4;
+                                    EngineActivity.this.blurredImageView.setRectSquare(rect3);
+                                    bitmapSquare = cropToSquare;
+                                    rect = rect3;
+                                }
+                                if (EngineActivity.this.mTemplate.getGradient() != null) {
+                                    EngineActivity.this.blurredImageView.setBitmap(UtilsBitmap.blur(EngineActivity.this, croppedBitmap, 20, 1), bitmapSquare, EngineActivity.this.mTemplate.getGradient(), EngineActivity.this.mTemplate.getIpad_type(), EngineActivity.this.mTemplate.geTypeResize(), rect);
+                                } else {
+                                    EngineActivity.this.blurredImageView.setBitmap(UtilsBitmap.blur(EngineActivity.this, croppedBitmap, 20, 1), bitmapSquare, EngineActivity.this.mTemplate.getColor_ipad(), EngineActivity.this.mTemplate.getIpad_type(), EngineActivity.this.mTemplate.geTypeResize(), rect);
+                                }
+                                int color;
+                                if (EngineActivity.this.mTemplate.getIpad_type() == IpadType.BLUE_TYPE.ordinal()) {
+                                    color = EngineActivity.this.blurredImageView.getPaintLecture().getColor();
+                                } else {
+                                    color = EngineActivity.this.blurredImageView.getPaintLecture().getColor() == -1 ? -256 : Common.COLOR_TRANSLATION;
+                                }
+                                EngineActivity.this.blurredImageView.setClr_trsl(color);
+                                EngineActivity.this.blurredImageView.setClr_aya(EngineActivity.this.blurredImageView.getPaintLecture().getColor());
+                                EngineActivity.this.addEntityFromTemplate();
+                            } catch (Exception e) {
+                            }
+                            EngineActivity.this.id_ffmpeg.add(Long.valueOf(FFmpegKit.executeWithArgumentsAsync(new String[]{"-i", str, "-ss", "" + EngineActivity.this.endFrame, "-r", "25", "-vf", "scale=" + height + ":" + height + ":force_original_aspect_ratio=increase", "-start_number", "" + (EngineActivity.this.endFrame * 25), "-q:v", "0", "-threads", "4", "-an", "-y", file2.getAbsolutePath()}, new FFmpegSessionCompleteCallback() {
+                                @Override // com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
+                                public void apply(FFmpegSession session) {
+                                }
+                            }).getSessionId()));
                         }
                     }).getSessionId()));
                 }
@@ -5933,19 +6107,114 @@ public class EngineActivity extends Base {
             this.val$path_video = str;
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:13:0x0061 A[SYNTHETIC] */
-        /* JADX WARN: Removed duplicated region for block: B:17:0x001d A[SYNTHETIC] */
         @Override // java.lang.Runnable
-        /*
-            Code decompiled incorrectly, please refer to instructions dump.
-            To view partially-correct add '--show-bad-code' argument
-        */
         public void run() {
-            /*
-                Method dump skipped, instructions count: 400
-                To view this dump add '--comments-level debug' option
-            */
-            throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.EngineActivity.AnonymousClass66.run():void");
+            try {
+                StringBuilder sb = new StringBuilder();
+                int count = 0;
+                for (Object pathObj : val$pathes) {
+                    String pathStr = (String) pathObj;
+                    Uri uri = Uri.parse(pathStr);
+                    String uriStr = uri.toString();
+                    String localPath;
+                    if (uriStr.startsWith("http://") || uriStr.startsWith("https://")) {
+                        localPath = AudioUtils.downloadFile(EngineActivity.this, uriStr, EngineActivity.this.mTemplate.getFolder_template());
+                    } else {
+                        localPath = AudioUtils.copyFromUri(EngineActivity.this, uri, EngineActivity.this.mTemplate.getFolder_template());
+                    }
+                    if (localPath != null) {
+                        sb.append("file '");
+                        sb.append(localPath.replace("'", "\\'"));
+                        sb.append("'\n");
+                        count++;
+                        EngineActivity.this.updateProgress(count, val$pathes.size());
+                    }
+                }
+                File concatFile = new File(EngineActivity.this.mTemplate.getFolder_template(), "concat.txt");
+                FileOutputStream fos = new FileOutputStream(concatFile);
+                fos.write(sb.toString().getBytes());
+                fos.close();
+                File outputFile = new File(EngineActivity.this.mTemplate.getFolder_template(), System.currentTimeMillis() + "_output.mp3");
+                File outputFilePcm = new File(EngineActivity.this.mTemplate.getFolder_template(), System.currentTimeMillis() + "_output.pcm");
+                List<String> cmd = new ArrayList<>();
+                cmd.add("-f");
+                cmd.add("concat");
+                cmd.add("-safe");
+                cmd.add("0");
+                cmd.add("-i");
+                cmd.add(concatFile.getAbsolutePath());
+                cmd.add("-map");
+                cmd.add("0:a");
+                cmd.add("-c");
+                cmd.add("copy");
+                cmd.add(outputFile.getAbsolutePath());
+                cmd.add("-map");
+                cmd.add("0:a");
+                cmd.add("-ac");
+                cmd.add("1");
+                cmd.add("-ar");
+                cmd.add("44100");
+                cmd.add("-f");
+                cmd.add("s16le");
+                cmd.add(outputFilePcm.getAbsolutePath());
+                cmd.add("-y");
+                EngineActivity.this.id_ffmpeg.add(Long.valueOf(FFmpegKit.executeWithArgumentsAsync(cmd.toArray(new String[0]), new FFmpegSessionCompleteCallback() {
+                    @Override // com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
+                    public void apply(FFmpegSession session) {
+                        if (ReturnCode.isSuccess(session.getReturnCode())) {
+                            if (val$index >= 0 && val$index < EngineActivity.this.mTemplate.getEntityMediaList().size()) {
+                                EntityMedia entityMedia = EngineActivity.this.mTemplate.getEntityMediaList().get(val$index);
+                                if (entityMedia.isApplyEffectInPreview()) {
+                                    File echoFile = new File(EngineActivity.this.mTemplate.getFolder_template(), System.currentTimeMillis() + "_audio_echo.mp3");
+                                    EffectAudio effectAudio = entityMedia.getEffectAudio();
+                                    float start = effectAudio.getStart() / 1000.0f;
+                                    float end = effectAudio.getEnd() / 1000.0f;
+                                    List<String> filters = new ArrayList<>();
+                                    filters.add("atrim=start=" + start + ":end=" + end);
+                                    filters.add("asetpts=N/SR/TB");
+                                    if (effectAudio.isRemoveNoice()) {
+                                        filters.add("afftdn=nf=-25");
+                                    }
+                                    filters.add(String.format(Locale.US, "volume=%.2f", effectAudio.getVolume()));
+                                    if (effectAudio.getFade_in() > 0) {
+                                        filters.add("afade=t=in:st=0:d=" + (float) effectAudio.getFade_in());
+                                    }
+                                    if (effectAudio.getFade_out() > 0) {
+                                        float fadeOutDuration = (float) effectAudio.getFade_out();
+                                        float fadeOutStart = end - start - fadeOutDuration;
+                                        filters.add("afade=t=out:st=" + fadeOutStart + ":d=" + fadeOutDuration);
+                                    }
+                                    if (effectAudio.isEnhance()) {
+                                        filters.add("equalizer=f=3000:t=h:width=200:g=2,compand=attacks=0.3:decays=0.8:points=-80/-80|-20/-10|0/-3");
+                                    }
+                                    if (effectAudio.getReverbPreset() != null) {
+                                        filters.add(effectAudio.getReverbPreset());
+                                    }
+                                    if (effectAudio.getDecays() > 0) {
+                                        filters.add(String.format(Locale.US, "aecho=%.2f:%.2f:%s:%s", 1.0f, effectAudio.getOutGain(), effectAudio.getDelays_cmd(), effectAudio.getDecays_cmd()));
+                                    }
+                                    if (effectAudio.getSpeed() != 1.0f) {
+                                        filters.addAll(EngineActivity.this.buildSpeedFilters(effectAudio.getSpeed()));
+                                    }
+                                    String filterStr = TextUtils.join(",", filters);
+                                    EngineActivity.this.id_ffmpeg.add(Long.valueOf(FFmpegKit.executeWithArgumentsAsync(new String[]{"-i", outputFile.getAbsolutePath(), "-af", filterStr, "-y", echoFile.getAbsolutePath()}, new FFmpegSessionCompleteCallback() {
+                                        @Override // com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
+                                        public void apply(FFmpegSession session2) {
+                                            EngineActivity.this.addAudioTemplate(Uri.fromFile(echoFile), val$pathes, val$index, outputFile.getAbsolutePath(), outputFilePcm.getAbsolutePath(), val$path_video);
+                                        }
+                                    }).getSessionId()));
+                                    return;
+                                }
+                            }
+                            EngineActivity.this.addAudioTemplate(Uri.fromFile(outputFile), val$pathes, val$index, outputFile.getAbsolutePath(), outputFilePcm.getAbsolutePath(), val$path_video);
+                        }
+                    }
+                }).getSessionId()));
+            } catch (Exception e) {
+                EngineActivity.this.hideProgressFragment();
+                EngineActivity.this.hideFragment();
+                e.printStackTrace();
+            }
         }
     }
 

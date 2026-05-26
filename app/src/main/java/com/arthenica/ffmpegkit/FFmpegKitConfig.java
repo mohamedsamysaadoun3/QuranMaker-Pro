@@ -2,6 +2,7 @@ package com.arthenica.ffmpegkit;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.SparseArray;
@@ -150,128 +151,92 @@ public class FFmpegKitConfig {
         disableNativeRedirection();
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:20:0x0080  */
-    /* JADX WARN: Removed duplicated region for block: B:47:? A[ADDED_TO_REGION, REMOVE, RETURN, SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:48:0x005f A[EXC_TOP_SPLITTER, SYNTHETIC] */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    private static void log(long r5, int r7, byte[] r8) {
-        /*
-            com.arthenica.ffmpegkit.Level r0 = com.arthenica.ffmpegkit.Level.from(r7)
-            java.lang.String r1 = new java.lang.String
-            r1.<init>(r8)
-            com.arthenica.ffmpegkit.Log r8 = new com.arthenica.ffmpegkit.Log
-            r8.<init>(r5, r0, r1)
-            com.arthenica.ffmpegkit.LogRedirectionStrategy r2 = com.arthenica.ffmpegkit.FFmpegKitConfig.globalLogRedirectionStrategy
-            com.arthenica.ffmpegkit.Level r3 = com.arthenica.ffmpegkit.FFmpegKitConfig.activeLogLevel
-            com.arthenica.ffmpegkit.Level r4 = com.arthenica.ffmpegkit.Level.AV_LOG_QUIET
-            if (r3 != r4) goto L1e
-            com.arthenica.ffmpegkit.Level r3 = com.arthenica.ffmpegkit.Level.AV_LOG_STDERR
-            int r3 = r3.getValue()
-            if (r7 != r3) goto L26
-        L1e:
-            com.arthenica.ffmpegkit.Level r3 = com.arthenica.ffmpegkit.FFmpegKitConfig.activeLogLevel
-            int r3 = r3.getValue()
-            if (r7 <= r3) goto L27
-        L26:
-            return
-        L27:
-            com.arthenica.ffmpegkit.Session r5 = getSession(r5)
-            r6 = 1
-            java.lang.String r7 = "ffmpeg-kit"
-            r3 = 0
-            if (r5 == 0) goto L5a
-            com.arthenica.ffmpegkit.LogRedirectionStrategy r2 = r5.getLogRedirectionStrategy()
-            r5.addLog(r8)
-            com.arthenica.ffmpegkit.LogCallback r4 = r5.getLogCallback()
-            if (r4 == 0) goto L5a
-            com.arthenica.ffmpegkit.LogCallback r5 = r5.getLogCallback()     // Catch: java.lang.Exception -> L46
-            r5.apply(r8)     // Catch: java.lang.Exception -> L46
-            goto L58
-        L46:
-            r5 = move-exception
-            java.lang.String r5 = com.arthenica.smartexception.java.Exceptions.getStackTraceString(r5)
-            java.lang.Object[] r5 = new java.lang.Object[]{r5}
-            java.lang.String r4 = "Exception thrown inside session log callback.%s"
-            java.lang.String r5 = java.lang.String.format(r4, r5)
-            android.util.Log.e(r7, r5)
-        L58:
-            r5 = r6
-            goto L5b
-        L5a:
-            r5 = r3
-        L5b:
-            com.arthenica.ffmpegkit.LogCallback r4 = com.arthenica.ffmpegkit.FFmpegKitConfig.globalLogCallback
-            if (r4 == 0) goto L76
-            r4.apply(r8)     // Catch: java.lang.Exception -> L63
-            goto L75
-        L63:
-            r8 = move-exception
-            java.lang.String r8 = com.arthenica.smartexception.java.Exceptions.getStackTraceString(r8)
-            java.lang.Object[] r8 = new java.lang.Object[]{r8}
-            java.lang.String r3 = "Exception thrown inside global log callback.%s"
-            java.lang.String r8 = java.lang.String.format(r3, r8)
-            android.util.Log.e(r7, r8)
-        L75:
-            r3 = r6
-        L76:
-            int[] r8 = com.arthenica.ffmpegkit.FFmpegKitConfig.AnonymousClass2.$SwitchMap$com$arthenica$ffmpegkit$LogRedirectionStrategy
-            int r2 = r2.ordinal()
-            r8 = r8[r2]
-            if (r8 == r6) goto Lb3
-            r6 = 2
-            if (r8 == r6) goto L92
-            r6 = 3
-            if (r8 == r6) goto L8f
-            r6 = 4
-            if (r8 == r6) goto L8a
-            goto L95
-        L8a:
-            if (r3 != 0) goto L8e
-            if (r5 == 0) goto L95
-        L8e:
-            return
-        L8f:
-            if (r5 == 0) goto L95
-            return
-        L92:
-            if (r3 == 0) goto L95
-            return
-        L95:
-            int[] r5 = com.arthenica.ffmpegkit.FFmpegKitConfig.AnonymousClass2.$SwitchMap$com$arthenica$ffmpegkit$Level
-            int r6 = r0.ordinal()
-            r5 = r5[r6]
-            switch(r5) {
-                case 1: goto Lb3;
-                case 2: goto Lb0;
-                case 3: goto Lb0;
-                case 4: goto Lac;
-                case 5: goto La8;
-                case 6: goto La4;
-                case 7: goto La4;
-                case 8: goto La4;
-                default: goto La0;
+    private static void log(long sessionId, int levelValue, byte[] data) {
+        Level level = Level.from(levelValue);
+        String message = new String(data);
+        Log log = new Log(sessionId, level, message);
+
+        LogRedirectionStrategy logRedirectionStrategy = globalLogRedirectionStrategy;
+
+        // Check if this log level should be processed
+        if (activeLogLevel == Level.AV_LOG_QUIET) {
+            if (levelValue != Level.AV_LOG_STDERR.getValue()) {
+                return;
             }
-        La0:
-            android.util.Log.v(r7, r1)
-            goto Lb3
-        La4:
-            android.util.Log.e(r7, r1)
-            goto Lb3
-        La8:
-            android.util.Log.w(r7, r1)
-            goto Lb3
-        Lac:
-            android.util.Log.i(r7, r1)
-            goto Lb3
-        Lb0:
-            android.util.Log.d(r7, r1)
-        Lb3:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.arthenica.ffmpegkit.FFmpegKitConfig.log(long, int, byte[]):void");
+        } else if (levelValue > activeLogLevel.getValue()) {
+            return;
+        }
+
+        Session session = getSession(sessionId);
+        boolean sessionCallbackDefined = false;
+        boolean globalCallbackDefined = false;
+
+        if (session != null) {
+            logRedirectionStrategy = session.getLogRedirectionStrategy();
+            session.addLog(log);
+            LogCallback sessionLogCallback = session.getLogCallback();
+            if (sessionLogCallback != null) {
+                try {
+                    sessionLogCallback.apply(log);
+                } catch (Exception e) {
+                    android.util.Log.e(TAG, String.format("Exception thrown inside session log callback.%s",
+                            Exceptions.getStackTraceString(e)));
+                }
+                sessionCallbackDefined = true;
+            }
+        }
+
+        if (globalLogCallback != null) {
+            try {
+                globalLogCallback.apply(log);
+            } catch (Exception e) {
+                android.util.Log.e(TAG, String.format("Exception thrown inside global log callback.%s",
+                        Exceptions.getStackTraceString(e)));
+            }
+            globalCallbackDefined = true;
+        }
+
+        // Apply log redirection strategy
+        switch (logRedirectionStrategy) {
+            case NEVER_PRINT_LOGS:
+                return;
+            case PRINT_LOGS_WHEN_GLOBAL_CALLBACK_NOT_DEFINED:
+                if (globalCallbackDefined) return;
+                break;
+            case PRINT_LOGS_WHEN_SESSION_CALLBACK_NOT_DEFINED:
+                if (sessionCallbackDefined) return;
+                break;
+            case PRINT_LOGS_WHEN_NO_CALLBACKS_DEFINED:
+                if (globalCallbackDefined || sessionCallbackDefined) return;
+                break;
+            case ALWAYS_PRINT_LOGS:
+            default:
+                break;
+        }
+
+        // Print to Android log based on level
+        switch (level) {
+            case AV_LOG_QUIET:
+                break;
+            case AV_LOG_TRACE:
+            case AV_LOG_DEBUG:
+                android.util.Log.d(TAG, message);
+                break;
+            case AV_LOG_INFO:
+                android.util.Log.i(TAG, message);
+                break;
+            case AV_LOG_WARNING:
+                android.util.Log.w(TAG, message);
+                break;
+            case AV_LOG_ERROR:
+            case AV_LOG_FATAL:
+            case AV_LOG_PANIC:
+                android.util.Log.e(TAG, message);
+                break;
+            default:
+                android.util.Log.v(TAG, message);
+                break;
+        }
     }
 
     /* renamed from: com.arthenica.ffmpegkit.FFmpegKitConfig$2, reason: invalid class name */
@@ -659,73 +624,36 @@ public class FFmpegKitConfig {
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:7:0x0031 A[Catch: all -> 0x006a, TRY_ENTER, TRY_LEAVE, TryCatch #2 {all -> 0x006a, blocks: (B:3:0x0002, B:7:0x0031, B:18:0x002b, B:23:0x0028, B:12:0x0011, B:14:0x0017, B:20:0x0023), top: B:2:0x0002, inners: #0, #1 }] */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public static java.lang.String getSafParameter(android.content.Context r7, android.net.Uri r8, java.lang.String r9) {
-        /*
-            java.lang.String r0 = "_display_name"
-            android.content.ContentResolver r1 = r7.getContentResolver()     // Catch: java.lang.Throwable -> L6a
-            r5 = 0
-            r6 = 0
-            r3 = 0
-            r4 = 0
-            r2 = r8
-            android.database.Cursor r1 = r1.query(r2, r3, r4, r5, r6)     // Catch: java.lang.Throwable -> L6a
-            if (r1 == 0) goto L2c
-            boolean r2 = r1.moveToFirst()     // Catch: java.lang.Throwable -> L20
-            if (r2 == 0) goto L2c
-            int r2 = r1.getColumnIndex(r0)     // Catch: java.lang.Throwable -> L20
-            java.lang.String r2 = r1.getString(r2)     // Catch: java.lang.Throwable -> L20
-            goto L2f
-        L20:
-            r7 = move-exception
-            if (r1 == 0) goto L2b
-            r1.close()     // Catch: java.lang.Throwable -> L27
-            goto L2b
-        L27:
-            r9 = move-exception
-            r7.addSuppressed(r9)     // Catch: java.lang.Throwable -> L6a
-        L2b:
-            throw r7     // Catch: java.lang.Throwable -> L6a
-        L2c:
-            java.lang.String r2 = "unknown"
-        L2f:
-            if (r1 == 0) goto L34
-            r1.close()     // Catch: java.lang.Throwable -> L6a
-        L34:
-            java.util.concurrent.atomic.AtomicInteger r0 = com.arthenica.ffmpegkit.FFmpegKitConfig.uniqueIdGenerator
-            int r0 = r0.getAndIncrement()
-            android.util.SparseArray<com.arthenica.ffmpegkit.FFmpegKitConfig$SAFProtocolUrl> r1 = com.arthenica.ffmpegkit.FFmpegKitConfig.safIdMap
-            com.arthenica.ffmpegkit.FFmpegKitConfig$SAFProtocolUrl r3 = new com.arthenica.ffmpegkit.FFmpegKitConfig$SAFProtocolUrl
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r0)
-            android.content.ContentResolver r7 = r7.getContentResolver()
-            r3.<init>(r4, r8, r9, r7)
-            r1.put(r0, r3)
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder
-            java.lang.String r8 = "saf:"
-            r7.<init>(r8)
-            java.lang.StringBuilder r7 = r7.append(r0)
-            java.lang.String r8 = "."
-            java.lang.StringBuilder r7 = r7.append(r8)
-            java.lang.String r8 = extractExtensionFromSafDisplayName(r2)
-            java.lang.StringBuilder r7 = r7.append(r8)
-            java.lang.String r7 = r7.toString()
-            return r7
-        L6a:
-            r7 = move-exception
-            java.lang.String r8 = r8.toString()
-            java.lang.String r9 = com.arthenica.smartexception.java.Exceptions.getStackTraceString(r7)
-            java.lang.Object[] r8 = new java.lang.Object[]{r0, r8, r9}
-            java.lang.String r9 = "Failed to get %s column for %s.%s"
-            java.lang.String r8 = java.lang.String.format(r9, r8)
-            java.lang.String r9 = "ffmpeg-kit"
-            android.util.Log.e(r9, r8)
-            throw r7
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.arthenica.ffmpegkit.FFmpegKitConfig.getSafParameter(android.content.Context, android.net.Uri, java.lang.String):java.lang.String");
+    public static String getSafParameter(Context context, Uri uri, String openMode) {
+        String displayNameColumn = "_display_name";
+        String displayName = "unknown";
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndex(displayNameColumn);
+                displayName = cursor.getString(columnIndex);
+            }
+        } catch (Throwable throwable) {
+            if (cursor != null) {
+                try {
+                    cursor.close();
+                } catch (Throwable suppressed) {
+                    throwable.addSuppressed(suppressed);
+                }
+            }
+            android.util.Log.e(TAG, String.format("Failed to get %s column for %s.%s",
+                    displayNameColumn, uri.toString(), Exceptions.getStackTraceString(throwable)));
+            throw throwable;
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        int safId = uniqueIdGenerator.getAndIncrement();
+        safIdMap.put(safId, new SAFProtocolUrl(Integer.valueOf(safId), uri, openMode, context.getContentResolver()));
+
+        return new StringBuilder("saf:").append(safId).append(".").append(extractExtensionFromSafDisplayName(displayName)).toString();
     }
 
     public static String getSafParameterForRead(Context context, Uri uri) {

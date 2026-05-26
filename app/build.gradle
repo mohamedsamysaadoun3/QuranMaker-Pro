@@ -102,5 +102,5 @@ dependencies {
 
     implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
 
-    implementation 'commons-io:commons-io:2.15.1'
+    // implementation 'commons-io:commons-io:2.15.1' // Included as source code
 }

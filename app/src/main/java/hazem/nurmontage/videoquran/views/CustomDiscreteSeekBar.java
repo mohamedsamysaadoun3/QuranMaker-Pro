@@ -12,6 +12,7 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import hazem.nurmontage.videoquran.R;
 import hazem.nurmontage.videoquran.Utils.LocaleHelper;
@@ -265,97 +266,55 @@ public class CustomDiscreteSeekBar extends View {
         canvas.drawCircle(this.mThumbX, this.mTrackRect.centerY(), this.mThumbRadius, this.mThumbPaint);
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:14:0x0037, code lost:
-    
-        if (r5 != 3) goto L39;
-     */
     @Override // android.view.View
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    public boolean onTouchEvent(android.view.MotionEvent r8) {
-        /*
-            r7 = this;
-            boolean r0 = r7.isEnabled()
-            r1 = 0
-            if (r0 == 0) goto L95
-            int r0 = r7.mMaxProgressIndex
-            if (r0 >= 0) goto Ld
-            goto L95
-        Ld:
-            float r0 = r8.getX()
-            float r2 = r8.getY()
-            boolean r3 = r7.mIsRTL
-            if (r3 == 0) goto L22
-            android.graphics.RectF r3 = r7.mTrackRect
-            float r3 = r3.left
-            android.graphics.RectF r4 = r7.mTrackRect
-            float r4 = r4.right
-            goto L2a
-        L22:
-            android.graphics.RectF r3 = r7.mTrackRect
-            float r3 = r3.left
-            android.graphics.RectF r4 = r7.mTrackRect
-            float r4 = r4.right
-        L2a:
-            int r5 = r8.getAction()
-            r6 = 1
-            if (r5 == 0) goto L70
-            if (r5 == r6) goto L4c
-            r2 = 2
-            if (r5 == r2) goto L3a
-            r2 = 3
-            if (r5 == r2) goto L4c
-            goto L90
-        L3a:
-            boolean r1 = r7.mIsDragging
-            if (r1 == 0) goto L90
-            float r8 = java.lang.Math.min(r0, r4)
-            float r8 = java.lang.Math.max(r3, r8)
-            r7.mThumbX = r8
-            r7.invalidate()
-            return r6
-        L4c:
-            boolean r2 = r7.mIsDragging
-            if (r2 == 0) goto L90
-            r7.mIsDragging = r1
-            int r8 = r7.mCurrentProgressIndex
-            r7.snapToNearestTickAndNotify(r0)
-            hazem.nurmontage.videoquran.views.CustomDiscreteSeekBar$OnProgressChangeListener r0 = r7.mListener
-            if (r0 == 0) goto L6f
-            int r1 = r7.mCurrentProgressIndex
-            if (r8 == r1) goto L6a
-            java.util.List<java.lang.String> r8 = r7.mLabels
-            java.lang.Object r8 = r8.get(r1)
-            java.lang.String r8 = (java.lang.String) r8
-            r0.onProgressChanged(r7, r1, r8, r6)
-        L6a:
-            hazem.nurmontage.videoquran.views.CustomDiscreteSeekBar$OnProgressChangeListener r8 = r7.mListener
-            r8.onStopTrackingTouch(r7)
-        L6f:
-            return r6
-        L70:
-            boolean r1 = r7.isTouchNearThumbOrTrack(r0, r2)
-            if (r1 == 0) goto L90
-            r7.mIsDragging = r6
-            hazem.nurmontage.videoquran.views.CustomDiscreteSeekBar$OnProgressChangeListener r8 = r7.mListener
-            if (r8 == 0) goto L7f
-            r8.onStartTrackingTouch(r7)
-        L7f:
-            float r8 = java.lang.Math.min(r0, r4)
-            float r8 = java.lang.Math.max(r3, r8)
-            r7.mThumbX = r8
-            r7.invalidate()
-            r7.performClick()
-            return r6
-        L90:
-            boolean r8 = super.onTouchEvent(r8)
-            return r8
-        L95:
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.views.CustomDiscreteSeekBar.onTouchEvent(android.view.MotionEvent):boolean");
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!isEnabled() || mMaxProgressIndex < 0) {
+            return false;
+        }
+        float x = event.getX();
+        float y = event.getY();
+        float trackLeft = mTrackRect.left;
+        float trackRight = mTrackRect.right;
+        int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                if (!isTouchNearThumbOrTrack(x, y)) {
+                    return super.onTouchEvent(event);
+                }
+                mIsDragging = true;
+                if (mListener != null) {
+                    mListener.onStartTrackingTouch(this);
+                }
+                mThumbX = Math.max(trackLeft, Math.min(x, trackRight));
+                invalidate();
+                performClick();
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                if (!mIsDragging) {
+                    return super.onTouchEvent(event);
+                }
+                mThumbX = Math.max(trackLeft, Math.min(x, trackRight));
+                invalidate();
+                return true;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if (!mIsDragging) {
+                    return super.onTouchEvent(event);
+                }
+                mIsDragging = false;
+                int oldProgress = mCurrentProgressIndex;
+                snapToNearestTickAndNotify(x);
+                if (mListener != null) {
+                    int newProgress = mCurrentProgressIndex;
+                    if (oldProgress != newProgress) {
+                        mListener.onProgressChanged(this, newProgress, mLabels.get(newProgress), true);
+                    }
+                    mListener.onStopTrackingTouch(this);
+                }
+                return true;
+            default:
+                return super.onTouchEvent(event);
+        }
     }
 
     private boolean isTouchNearThumbOrTrack(float f, float f2) {
