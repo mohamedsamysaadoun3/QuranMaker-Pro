@@ -45,6 +45,8 @@ import hazem.nurmontage.videoquran.Utils.UtilsFileLast;
 import hazem.nurmontage.videoquran.common.Common;
 import hazem.nurmontage.videoquran.constant.AyaTextPreset;
 import hazem.nurmontage.videoquran.constant.IpadType;
+import hazem.nurmontage.videoquran.entity_timeline.EntityQuranTimeline;
+import hazem.nurmontage.videoquran.entity_timeline.EntityTrslTimeline;
 import hazem.nurmontage.videoquran.constant.ResizeType;
 import hazem.nurmontage.videoquran.constant.SurahNameStyle;
 import hazem.nurmontage.videoquran.model.BismilahEntity;
@@ -2195,16 +2197,118 @@ public class BlurredImageView extends View implements View.OnTouchListener {
     /* JADX WARN: Removed duplicated region for block: B:38:0x0130 A[Catch: all -> 0x01a6, Exception -> 0x01a8, TryCatch #1 {Exception -> 0x01a8, blocks: (B:3:0x0003, B:14:0x0015, B:16:0x0030, B:18:0x0036, B:20:0x0040, B:22:0x004a, B:24:0x0054, B:27:0x0060, B:29:0x006a, B:31:0x006e, B:33:0x0072, B:35:0x0078, B:36:0x012c, B:38:0x0130, B:39:0x0138, B:41:0x0148, B:43:0x014c, B:45:0x0152, B:47:0x0158, B:49:0x015c, B:51:0x0162, B:53:0x016e, B:55:0x0176, B:57:0x0182, B:58:0x0135, B:59:0x0085, B:61:0x008f, B:63:0x0093, B:64:0x00a0, B:66:0x00aa, B:68:0x00b0, B:69:0x00c3, B:70:0x00c9, B:72:0x00d3, B:74:0x00dd, B:76:0x00e7, B:78:0x00f1, B:80:0x00fb, B:81:0x0107, B:82:0x0113, B:84:0x0117, B:86:0x011b, B:88:0x0121, B:89:0x0189, B:91:0x018f, B:93:0x0195, B:94:0x0198), top: B:2:0x0003, outer: #0 }] */
     /* JADX WARN: Removed duplicated region for block: B:58:0x0135 A[Catch: all -> 0x01a6, Exception -> 0x01a8, TryCatch #1 {Exception -> 0x01a8, blocks: (B:3:0x0003, B:14:0x0015, B:16:0x0030, B:18:0x0036, B:20:0x0040, B:22:0x004a, B:24:0x0054, B:27:0x0060, B:29:0x006a, B:31:0x006e, B:33:0x0072, B:35:0x0078, B:36:0x012c, B:38:0x0130, B:39:0x0138, B:41:0x0148, B:43:0x014c, B:45:0x0152, B:47:0x0158, B:49:0x015c, B:51:0x0162, B:53:0x016e, B:55:0x0176, B:57:0x0182, B:58:0x0135, B:59:0x0085, B:61:0x008f, B:63:0x0093, B:64:0x00a0, B:66:0x00aa, B:68:0x00b0, B:69:0x00c3, B:70:0x00c9, B:72:0x00d3, B:74:0x00dd, B:76:0x00e7, B:78:0x00f1, B:80:0x00fb, B:81:0x0107, B:82:0x0113, B:84:0x0117, B:86:0x011b, B:88:0x0121, B:89:0x0189, B:91:0x018f, B:93:0x0195, B:94:0x0198), top: B:2:0x0003, outer: #0 }] */
     @Override // android.view.View
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct add '--show-bad-code' argument
-    */
-    protected void onDraw(android.graphics.Canvas r6) {
-        /*
-            Method dump skipped, instructions count: 456
-            To view this dump add '--comments-level debug' option
-        */
-        throw new UnsupportedOperationException("Method not decompiled: hazem.nurmontage.videoquran.views.BlurredImageView.onDraw(android.graphics.Canvas):void");
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        try {
+            if (this.isNotDraw) {
+                if (isPlaying() && this.iViewCallback != null) {
+                    this.iViewCallback.onDrawFinish();
+                }
+                return;
+            }
+
+            canvas.save();
+            canvas.translate(this.mDrawingTranslationX, this.mDrawingTranslationY);
+            canvas.clipRect(0, 0, this.mCanvas_width, this.mCanvas_height);
+            canvas.drawColor(0xFF000000);
+
+            if (this.bitmapBlured != null && !this.bitmapBlured.isRecycled()) {
+                // GRADIENT, MASK_BRUSH, BLACK_LAYER, CASSET_IMG types - draw unblurred bitmap
+                if (this.mIpadType == IpadType.GRADIENT.ordinal() ||
+                    this.mIpadType == IpadType.MASK_BRUSH.ordinal() ||
+                    this.mIpadType == IpadType.BLACK_LAYER.ordinal() ||
+                    this.mIpadType == IpadType.CASSET_IMG.ordinal()) {
+                    if (!this.isVideo && this.bitmapNotBlur != null && !this.bitmapNotBlur.isRecycled()) {
+                        canvas.drawBitmap(this.bitmapNotBlur, this.btmX, this.btmY, this.paint);
+                    }
+                }
+                // BLUE_TYPE - draw with grayscale paint
+                else if (this.mIpadType == IpadType.BLUE_TYPE.ordinal()) {
+                    if (!this.isVideo && this.bitmapNotBlur != null && !this.bitmapNotBlur.isRecycled()) {
+                        canvas.drawBitmap(this.bitmapNotBlur, this.btmX, this.btmY, this.grayscalePaint);
+                    }
+                }
+                // CASSET_IMG_BLUR
+                else if (this.mIpadType == IpadType.CASSET_IMG_BLUR.ordinal()) {
+                    if (!this.isVideo) {
+                        canvas.drawBitmap(this.bitmapBlured, this.btmX, this.btmY, this.paint);
+                    }
+                }
+                // IPAD_CLASSIC - draw gradient or solid color
+                else if (this.mIpadType == IpadType.IPAD_CLASSIC.ordinal()) {
+                    if (getColor_gradient() != null) {
+                        this.paint.setShader(this.linearGradient_classic);
+                        canvas.drawPaint(this.paint);
+                        this.paint.setShader(null);
+                    } else {
+                        canvas.drawColor(this.color_bg_type_classic);
+                    }
+                }
+                // IPAD_NEOMORPHIC, HEART, BATTERY, CASSET - no background bitmap needed
+                else if (this.mIpadType != IpadType.IPAD_NEOMORPHIC.ordinal() &&
+                         this.mIpadType != IpadType.HEART.ordinal() &&
+                         this.mIpadType != IpadType.BATTERY.ordinal() &&
+                         this.mIpadType != IpadType.CASSET.ordinal()) {
+                    // IPAD_UNBLUR
+                    if (this.mIpadType == IpadType.IPAD_UNBLUR.ordinal()) {
+                        canvas.drawBitmap(this.bitmapNotBlur, this.btmX, this.btmY, this.paint);
+                    }
+                    // Default: draw blurred bitmap
+                    else {
+                        canvas.drawBitmap(this.bitmapBlured, this.btmX, this.btmY, this.paint);
+                    }
+                }
+            }
+
+            // Draw iPad frame or progress bar
+            if (this.bitmapSquare != null) {
+                drawIpad(canvas, true);
+            } else {
+                drawProgress(canvas);
+            }
+
+            // Draw overlay elements
+            drawLineHelper(canvas);
+            drawBismilah(canvas);
+            drawEntity(canvas);
+            drawNameSurah(canvas);
+
+            // Draw selection tool
+            if (this.entity_select != null && this.selectTool != null && this.entity_select.isVisible()) {
+                boolean shouldDrawSelection = true;
+                if (!(this.entity_select instanceof SurahNameEntity) && !(this.entity_select instanceof BismilahEntity)) {
+                    EntityQuranTimeline quranTimeline = this.entity_select.getEntityQuran();
+                    if (quranTimeline != null && quranTimeline.visible()) {
+                        shouldDrawSelection = true;
+                    } else if (quranTimeline == null) {
+                        EntityTrslTimeline trslTimeline = this.entity_select.getEntityTrslTimeline();
+                        if (trslTimeline != null && trslTimeline.visible()) {
+                            shouldDrawSelection = true;
+                        } else {
+                            shouldDrawSelection = false;
+                        }
+                    } else {
+                        shouldDrawSelection = false;
+                    }
+                }
+                if (shouldDrawSelection) {
+                    this.selectTool.draw(canvas, this.entity_select);
+                }
+            }
+
+            // Draw watermark if not pro
+            if (!isPro() && !isRemoveWattermark()) {
+                drawWattermark(canvas, false);
+            }
+
+            canvas.restore();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (isPlaying() && this.iViewCallback != null) {
+            this.iViewCallback.onDrawFinish();
+        }
     }
 
     private void drawProgress(Canvas canvas) {
