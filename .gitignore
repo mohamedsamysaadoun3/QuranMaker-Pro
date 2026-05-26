@@ -2,7 +2,7 @@
 build/
 .gradle/
 local.properties
-*.apk
+# *.apk  # Commented out to allow APK in release/
 
 # JDK
 jdk-17/
